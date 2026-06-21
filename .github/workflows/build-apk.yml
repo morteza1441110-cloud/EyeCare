@@ -1,0 +1,30 @@
+name: ساخت خودکار APK
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: دریافت کد
+        uses: actions/checkout@v4
+
+      - name: نصب جاوا
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: ساخت APK
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: آپلود خروجی
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-app-debug.apk
+          path: app/build/outputs/apk/debug/
